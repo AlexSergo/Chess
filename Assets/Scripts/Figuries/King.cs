@@ -28,9 +28,9 @@ public class King : Figure
         IsCheck = false;
         FindCells();
         if (IsCheck)
-            _myCell.SetLight(UnityEngine.Color.red);
+            transform.parent.GetComponent<Cell>().SetLight(UnityEngine.Color.red);
         else
-            _myCell.SetLight(UnityEngine.Color.white);
+            transform.parent.GetComponent<Cell>().SetLight(UnityEngine.Color.white);
         return IsCheck;
     }
 
@@ -78,6 +78,7 @@ public class King : Figure
 
     private void FindCells()
     {
+        Debug.Log(transform.position + " - проверка клетки");
         FindKnightCells();
         FindBishopCells();
         FindRookCells();

@@ -59,16 +59,15 @@
     <Compile Include="Assets\Scripts\Figuries\King.cs" />
     <Compile Include="Assets\Scripts\Cell.cs" />
     <Compile Include="Assets\Scripts\Figuries\Rook.cs" />
+    <Compile Include="Assets\Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\Cells.cs" />
     <Compile Include="Assets\Scripts\Figuries\Knight.cs" />
     <Compile Include="Assets\Scripts\Figuries\Pawn.cs" />
     <Compile Include="Assets\Scripts\Figuries\Bishop.cs" />
     <Compile Include="Assets\Scripts\FigureColor.cs" />
     <Compile Include="Assets\Scripts\InitMap.cs" />
-    <Compile Include="Assets\Scripts\GameProcess.cs" />
-    <Compile Include="Assets\Scripts\Figuries\Figure.cs" />
     <Compile Include="Assets\Scripts\SearchWay.cs" />
-    <Compile Include="Assets\Scripts\Game.cs" />
+    <Compile Include="Assets\Scripts\Figuries\Figure.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

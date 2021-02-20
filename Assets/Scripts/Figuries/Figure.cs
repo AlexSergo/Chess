@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Figure : MonoBehaviour
 {
@@ -24,10 +22,6 @@ public class Figure : MonoBehaviour
         Keep();
     }
 
-    private void OnMouseDown()  
-    {
-    }
-
     public void SetLight()
     {
         foreach(var cell in _availableCells)
@@ -37,13 +31,34 @@ public class Figure : MonoBehaviour
     public void TryPreventCheck()
     {
         Transform previosCell = transform.parent;
+        Transform availableKill = null;
+        Transform availableKillCell = null;
         List<Cell> garbage = new List<Cell>();
-        int n = _availableCells.Count;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < _availableCells.Count; i++)
         {
+            if (!_availableCells[i].IsFree())
+            {
+                availableKill = _availableCells[i].Figure.transform;
+                availableKillCell = _availableCells[i].transform;
+                availableKill.SetParent(Camera.main.transform);
+                availableKill.position = new Vector3(-100, -100);
+            }
             transform.SetParent(_availableCells[i].transform);
+            transform.localPosition = new Vector3(0,0,0);
+            if (transform.GetComponent<King>() != null)
+                Debug.Log("клетка короля: " + transform.position);
             Game.Check();
+            if (transform.GetComponent<King>() != null)
+            {
+                if (Game.IsCheck(Color))
+                    Debug.Log("Недоступная клетка - " + _availableCells[i].Position);
+            }
             FindGarbageCell(previosCell, garbage, i);
+            if (availableKill != null && availableKill.parent != availableKillCell)
+            {
+                availableKill.SetParent(availableKillCell);
+                availableKill.localPosition = new Vector3(0, 0, 0);
+            }
         }
         foreach (var cell in garbage)
             _availableCells.Remove(cell);
@@ -60,11 +75,15 @@ public class Figure : MonoBehaviour
     {
         if (Game.IsCheck(Color))
         {
+            if (transform.GetComponent<King>() != null)
+                Debug.Log("Мусор - " + _availableCells[i].Position);
             transform.SetParent(previosCell);
             garbage.Add(_availableCells[i]);
         }
         else
+        {
             _availableCells[i].SetLight(UnityEngine.Color.green);
+        }
     }
 
     public bool BrokeUp()
@@ -80,20 +99,17 @@ public class Figure : MonoBehaviour
             if (cell.Position == Round(transform.position))
             {
                 if (!cell.IsFree())
-                {
                     Destroy(cell.Figure.gameObject);
-                    Thread.Sleep(30);
-                }
+
                 transform.SetParent(cell.transform, false);
                 transform.localPosition = new Vector3(0, 0, 0);
                 _availableCells.Clear();
                 if (Game.CurrentMove == Color)
-                {
                     if (Color == FigureColor.White)
                         Game.CurrentMove = FigureColor.Black;
                     else
                         Game.CurrentMove = FigureColor.White;
-                }
+
                 StartCoroutine(Game.CheckAfterKill());
                 break;
             }

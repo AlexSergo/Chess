@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bishop : Queen
+public class Bishop : Figure
 {
     private void OnMouseUp()
     {
@@ -13,6 +13,7 @@ public class Bishop : Queen
     {
         _previousPosition = transform.position;
 
-        FindDiagonalCells(transform, _availableCells);
+        SearchWay.BishopCells(transform, _availableCells);
+        TryPreventCheck();
     }
 }

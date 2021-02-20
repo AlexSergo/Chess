@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Pawn : Figure
 {
-   // private Vector3 _previousPosition;
     private const int _step = 2;
     private bool _wasFirstMove = false;
 
@@ -27,6 +26,7 @@ public class Pawn : Figure
             Move(-_step);
             Kill(-_step);
         }
+        TryPreventCheck();
     }
 
     private void Kill(int step)

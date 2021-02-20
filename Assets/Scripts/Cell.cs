@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class Cell : MonoBehaviour
         } 
         private set { } 
     }
+    public void SetLight(Color color)
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = color;
+    }
 
     private void Start()
     {
@@ -30,5 +35,8 @@ public class Cell : MonoBehaviour
         return false;
     }
 
-
+    public void LightOff()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+    }
 }

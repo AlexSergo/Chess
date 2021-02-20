@@ -1,4 +1,4 @@
-﻿public class Rook : Queen
+﻿public class Rook : Figure
 {
     private void OnMouseUp()
     {
@@ -9,7 +9,8 @@
     {
         _previousPosition = transform.position;
 
-        FindLineCells(transform, _availableCells);
+        SearchWay.RookCells(transform, _availableCells);
+        TryPreventCheck();
     }
 
 }

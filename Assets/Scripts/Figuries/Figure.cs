@@ -28,6 +28,11 @@ public class Figure : MonoBehaviour
             cell.SetLight(UnityEngine.Color.green);
     }
 
+    public bool IsMyCurrentMove()
+    {
+        return Game.CurrentMove == Color ? true : false;
+    }
+
     public void TryPreventCheck()
     {
         Transform previosCell = transform.parent;
@@ -45,14 +50,7 @@ public class Figure : MonoBehaviour
             }
             transform.SetParent(_availableCells[i].transform);
             transform.localPosition = new Vector3(0,0,0);
-            if (transform.GetComponent<King>() != null)
-                Debug.Log("клетка короля: " + transform.position);
             Game.Check();
-            if (transform.GetComponent<King>() != null)
-            {
-                if (Game.IsCheck(Color))
-                    Debug.Log("Недоступная клетка - " + _availableCells[i].Position);
-            }
             FindGarbageCell(previosCell, garbage, i);
             if (availableKill != null && availableKill.parent != availableKillCell)
             {
@@ -75,15 +73,11 @@ public class Figure : MonoBehaviour
     {
         if (Game.IsCheck(Color))
         {
-            if (transform.GetComponent<King>() != null)
-                Debug.Log("Мусор - " + _availableCells[i].Position);
             transform.SetParent(previosCell);
             garbage.Add(_availableCells[i]);
         }
         else
-        {
             _availableCells[i].SetLight(UnityEngine.Color.green);
-        }
     }
 
     public bool BrokeUp()
@@ -99,16 +93,14 @@ public class Figure : MonoBehaviour
             if (cell.Position == Round(transform.position))
             {
                 if (!cell.IsFree())
+                {
                     Destroy(cell.Figure.gameObject);
+                    cell.Figure.transform.SetParent(Camera.main.transform);
+                }
 
                 transform.SetParent(cell.transform, false);
                 transform.localPosition = new Vector3(0, 0, 0);
                 _availableCells.Clear();
-                if (Game.CurrentMove == Color)
-                    if (Color == FigureColor.White)
-                        Game.CurrentMove = FigureColor.Black;
-                    else
-                        Game.CurrentMove = FigureColor.White;
 
                 StartCoroutine(Game.CheckAfterKill());
                 break;
@@ -120,6 +112,10 @@ public class Figure : MonoBehaviour
             transform.position = _previousPosition;
             return false;
         }
+        if (Game.CurrentMove == FigureColor.Black)
+            Game.CurrentMove = FigureColor.White;
+        else Game.CurrentMove = FigureColor.Black;
+        Game.RotateCamera();
         return true;
     }
 

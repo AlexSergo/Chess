@@ -8,7 +8,7 @@
     private void OnMouseDown()
     {
         _previousPosition = transform.position;
-
+        if (!IsMyCurrentMove()) return;
         SearchWay.RookCells(transform, _availableCells);
         TryPreventCheck();
     }

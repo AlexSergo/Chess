@@ -73,5 +73,6 @@ public class InitMap : MonoBehaviour
         }
 
         Cells.InitializationCells(MapCells);
+        Game.RotateCamera();
     }
 }

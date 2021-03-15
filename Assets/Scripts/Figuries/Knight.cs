@@ -12,6 +12,7 @@ public class Knight : Figure
     private void OnMouseDown()
     {
         _previousPosition = transform.position;
+        if (!IsMyCurrentMove()) return;
         SearchWay.KnightCells(transform, _availableCells);
         TryPreventCheck();
     }

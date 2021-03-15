@@ -16,6 +16,7 @@ public class Pawn : Figure
     private void OnMouseDown()
     {
         _previousPosition = transform.position;
+        if (!IsMyCurrentMove()) return;
         if (Color == FigureColor.Black)
         {
             Move(_step);

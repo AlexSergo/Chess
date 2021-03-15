@@ -29,4 +29,19 @@ public static class Cells
             return null;
         }
     }
+
+    public static void RotateFiguries()
+    {
+        for (int i = 0; i < _countCells; i++)
+            for (int j = 0; j < _countCells; j++)
+            {
+                if (AllCells[i, j].Figure != null)
+                {
+                    if (Game.IsRotate)
+                        AllCells[i, j].Figure.transform.rotation = new Quaternion(0, 0, 0, 0);
+                    else
+                        AllCells[i, j].Figure.transform.rotation = new Quaternion(0, 0,-180, 0);
+                }
+            }
+    }
 }

@@ -12,7 +12,7 @@ public class Bishop : Figure
     private void OnMouseDown()
     {
         _previousPosition = transform.position;
-
+        if (!IsMyCurrentMove()) return;
         SearchWay.BishopCells(transform, _availableCells);
         TryPreventCheck();
     }

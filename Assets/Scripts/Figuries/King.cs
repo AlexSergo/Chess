@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +15,11 @@ public class King : Figure
 
     private void OnMouseUp()
     {
-        BrokeUp();
+        if (BrokeUp())
+        {
+            _myCell.SetLight(UnityEngine.Color.white);
+            _myCell = transform.parent.GetComponent<Cell>();
+        }
     }
 
     public bool Checkmate()
@@ -28,9 +27,9 @@ public class King : Figure
         IsCheck = false;
         FindCells();
         if (IsCheck)
-            transform.parent.GetComponent<Cell>().SetLight(UnityEngine.Color.red);
+            _myCell.SetLight(UnityEngine.Color.red);
         else
-            transform.parent.GetComponent<Cell>().SetLight(UnityEngine.Color.white);
+            _myCell.SetLight(UnityEngine.Color.white);
         return IsCheck;
     }
 
@@ -76,17 +75,34 @@ public class King : Figure
         }
     }
 
+    private void FindPawnCells()
+    {
+        if (Color == FigureColor.Black)
+            PawnCheck(2);
+        else
+            PawnCheck(-2);
+    }
+
+    private void PawnCheck(int y)
+    {
+        Cell cell1 = Cells.GetCell(new Vector3(_myCell.Position.x + 2, _myCell.Position.y + y)).GetComponent<Cell>();
+        Cell cell2 = Cells.GetCell(new Vector3(_myCell.Position.x - 2, _myCell.Position.y + y)).GetComponent<Cell>();
+        if ((!cell1.IsFree() && cell1.Figure.Color != Color) || (!cell2.IsFree() && cell2.Figure.Color != Color))
+            IsCheck = true;
+    }
+
     private void FindCells()
     {
-        Debug.Log(transform.position + " - проверка клетки");
         FindKnightCells();
         FindBishopCells();
         FindRookCells();
+        FindPawnCells();
     }
 
     private void OnMouseDown()
     {
         _previousPosition = transform.position;
+        if (!IsMyCurrentMove()) return;
         FindAvailableCells();
         SetLight();
     }
